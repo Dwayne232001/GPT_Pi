@@ -48,7 +48,6 @@ This project creates a versatile AI-powered home assistant specifically designed
    pip3 install gTTS pygame SpeechRecognition pyttsx3 Pillow requests
    sudo apt install python3-tk -y
    pip3 install openai
-   
 
 3. **Clone the Project Repository:**
    ```bash
