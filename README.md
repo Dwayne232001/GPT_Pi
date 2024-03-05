@@ -52,7 +52,7 @@ This project creates a versatile AI-powered home assistant specifically designed
 
 3. **Clone the Project Repository:**
    ```bash
-   git clone [https://github.com/your-username/your-repo-name](https://github.com/your-username/your-repo-name)
+   git clone https://github.com/Dwayne232001/GPT_Pi.git
 
 4. **Run the Project:**
    ```bash
