@@ -35,7 +35,7 @@ This project creates a versatile AI-powered home assistant specifically designed
 **Installation Instructions**
 
 1. **Set up an OpenAI API Key:**
-   * Visit the OpenAI website ([https://openai.com/api/](https://platform.openai.com/api-keys)) and create an account.
+   * Visit the OpenAI website ([https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)) and create an account.
    * Navigate to your account settings and obtain your API key.
 
 2. **Install Dependencies**
