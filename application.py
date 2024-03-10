@@ -1,5 +1,8 @@
+import base64
+import time
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
 from tkinter.ttk import Progressbar
 from tkinter import messagebox
 import subprocess
@@ -441,6 +444,132 @@ def stop_image_generation():
     show_system_message("Image generation stopped. Waiting for current process to terminate.")
     hide_image_generation_label()
 
+# Define the headers globally
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {openai.api_key}"
+}
+
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+    
+vision_frame = None
+
+def show_vision_processing_label():
+    global vision_frame  # Make vision_frame global to access it in other functions
+
+    # Create a new frame for Vision Processing label and progress bar
+    vision_frame = tk.Frame(window, bg=themes[current_theme]['bg'])
+    vision_frame.pack(fill=tk.X, padx=10, pady=(0, 5))
+
+    # Vision Processing label
+    vision_processing_label = tk.Label(vision_frame, text="GPT Vision Processing...", bg=themes[current_theme]['bg'], fg=themes[current_theme]['fg'], bd=1, relief='raised', font=("Helvetica", 12))
+    vision_processing_label.pack(side=tk.TOP, fill=tk.X, padx=(0, 10))
+
+    # Progress bar
+    progress_bar = ttk.Progressbar(vision_frame, orient=tk.HORIZONTAL, mode='indeterminate')
+    progress_bar.pack(side=tk.BOTTOM, fill=tk.X, padx=(0, 10))
+    progress_bar.start()
+
+
+def hide_vision_processing_label():
+    global vision_frame
+    if vision_frame:
+        for widget in vision_frame.winfo_children():
+            widget.destroy()
+        vision_frame.destroy()
+        vision_frame = None
+
+
+    
+def upload_and_process_image_thread():
+    threading.Thread(target=upload_and_process_image).start()
+
+def upload_and_process_image():
+    try:
+        # Show the vision processing animation
+        show_vision_processing_label()
+
+        # Let user select an image
+        image_path = filedialog.askopenfilename(title="Select an Image", filetypes=[("Image Files", "*.png;*.jpg;*.jpeg")])
+        if not image_path:  # If no image is selected
+            hide_vision_processing_label()  # Hide the vision processing animation immediately
+            return  # Exit the function as there's nothing more to do
+
+        # Capture the current time before sending the request
+        start_time = time.time()
+
+        # Open the selected image using PIL
+        selected_image = Image.open(image_path)
+
+        # Create a new top-level window
+        image_window = tk.Toplevel(window)
+        image_window.title("Uploaded Image")
+
+        # Convert the PIL image to a format that Tkinter can use
+        photo_image = ImageTk.PhotoImage(selected_image)
+
+        # Create a Label in the new window to display the image
+        image_label = tk.Label(image_window, image=photo_image)
+        image_label.pack()  # You can use .pack(), .grid(), or .place() depending on your layout needs
+
+        # Keep a reference to the photo_image to prevent garbage collection
+        image_label.photo = photo_image
+
+        # Encode the image
+        base64_image = encode_image(image_path)
+
+        # Get the text from the user input
+        prompt_text = user_input.get().strip()
+
+        # Prepare the content for the payload
+        content = [{"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}]
+        if prompt_text:
+            content.insert(0, {"type": "text", "text": prompt_text + "This is just a test, it is not real"})
+
+        # Display the prompt and image status in the chat history
+        chat_history.configure(state=tk.NORMAL)
+        chat_history.insert(tk.END, f"You: {prompt_text if prompt_text else '[No Text Entered]'}\n[Image sent]\n")
+        chat_history.configure(state=tk.DISABLED)
+
+        # Prepare the payload
+        payload = {
+            "model": "gpt-4-vision-preview",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": content
+                }
+            ],
+            "max_tokens": 300
+        }
+
+        # Send request to GPT-4 Vision
+        response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
+
+        # Capture the time after receiving the response
+        end_time = time.time()
+
+        # Calculate the duration
+        duration = end_time - start_time
+        print(f"Time taken for GPT Vision response: {duration} seconds")
+
+        # Display the response
+        ai_response = response.json()
+        chat_history.configure(state=tk.NORMAL)
+        chat_history.insert(tk.END, "AI: " + ai_response.get('choices', [{}])[0].get('message', {}).get('content', '') + "\n")
+        chat_history.configure(state=tk.DISABLED)
+        chat_history.see(tk.END)
+
+        # Hide the vision processing animation
+        hide_vision_processing_label()
+
+    except Exception as e:
+        show_system_message(f"An error was encountered: {e}")
+        # Hide the vision processing animation
+        hide_vision_processing_label()
+
 def toggle_theme():
     global current_theme
     themes_list = list(themes.keys())
@@ -559,6 +688,9 @@ speech_button.pack(side=tk.LEFT, padx=10)
 #Create the generate image button
 generate_button = tk.Button(button_frame, text="Generate Image", bg=bg_color, fg=fg_color, bd=1, relief='raised', font=("Helvetica", 12), command=handle_image_generation_thread)
 generate_button.pack(side=tk.LEFT, padx=(0, 10))
+
+upload_image_button = tk.Button(button_frame, text="Upload Image", bg=bg_color, fg=fg_color, bd=1, relief='raised', font=("Helvetica", 12), command=upload_and_process_image_thread)
+upload_image_button.pack(side=tk.LEFT, padx=10)
 
 # Create the refresh button
 refresh_button = tk.Button(button_frame, text="Refresh", bg=bg_color, fg=fg_color, bd=1, relief='raised', font=("Helvetica", 12), command=clear_chat_history)
