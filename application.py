@@ -690,7 +690,7 @@ generate_button = tk.Button(button_frame, text="Generate Image", bg=bg_color, fg
 generate_button.pack(side=tk.LEFT, padx=(0, 10))
 
 upload_image_button = tk.Button(button_frame, text="Upload Image", bg=bg_color, fg=fg_color, bd=1, relief='raised', font=("Helvetica", 12), command=upload_and_process_image_thread)
-upload_image_button.pack(side=tk.LEFT, padx=10)
+upload_image_button.pack(side=tk.LEFT, padx=(0, 10))
 
 # Create the refresh button
 refresh_button = tk.Button(button_frame, text="Refresh", bg=bg_color, fg=fg_color, bd=1, relief='raised', font=("Helvetica", 12), command=clear_chat_history)
