@@ -1,14 +1,14 @@
 # GPT_Pi
 ChatGPT for a Raspberry Pi
 
-This project creates a versatile AI-powered home assistant specifically designed to run on a Raspberry Pi. It leverages OpenAI's language models (GPT-4) for intelligent assistance and interaction.
+This project creates a versatile AI-powered home virtual assistant designed to run on a Raspberry Pi. It leverages OpenAI's language models (GPT-4) and other models, such as Dall-E and GPT Vision, for intelligent assistance and interaction.
 
 **Technologies Used**
 
 - **Tkinter**: A standard GUI (Graphical User Interface) library for Python, used for creating the application's window, buttons, text input fields, and other UI elements.
 - **Threading**: A module for running tasks in separate threads to prevent the UI from becoming unresponsive during operations such as speech synthesis or API requests.
 - **gtts (Google Text-to-Speech)**: A library that allows Python to interface with Google's Text to Speech API, converting text into spoken voice.
-- **OpenAI**: Specifically, this refers to the integration with OpenAI's API, suggesting the use of models such as GPT-3 or GPT-4 for generating text-based responses.
+- **OpenAI**: Specifically, this refers to the integration with OpenAI's API, incoporating the use of models such as Dall-E, GPT Vision or GPT-4 for generating responses.
 - **json**: A module for parsing and generating JSON data, used here for loading and saving chat history in a JSON file format.
 - **os**: A module providing a way to use operating system dependent functionality like file operations (e.g., reading, writing, and deleting files).
 - **pygame**: A library used for creating video games, which includes the ability to play audio files. In this context, it is used for playing sound effects and synthesized speech.
@@ -24,6 +24,7 @@ This project creates a versatile AI-powered home assistant specifically designed
 * Text-based interaction
 * Voice-based interaction
 * Image generation
+* Image Interpretation
 
 **Prerequisites**
 
