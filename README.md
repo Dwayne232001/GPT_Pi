@@ -67,6 +67,7 @@ This project creates a versatile AI-powered home virtual assistant designed to r
 * **Text-based Interaction:** Type in prompts or commands and the system will provide text-based responses.
 * **Voice-based Interaction:** Speak your prompts and the system will process them, providing either text or spoken responses (depending on your implementation).
 * **Image Generation:** Describe a scene or object and the system will generate an image.
+* **Image-based Interaction:** Upload a picture (a landscape, a painting, anything!) and the application will analyze it.
 
 **Example Interactions**
 
