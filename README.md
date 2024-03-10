@@ -24,7 +24,7 @@ This project creates a versatile AI-powered home virtual assistant designed to r
 * Text-based interaction
 * Voice-based interaction
 * Image generation
-* Image Interpretation
+* Image interpretation
 
 **Prerequisites**
 
